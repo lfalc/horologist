@@ -1,24 +1,26 @@
 import pandas as pd
+import json
 
-def get_AIO_hits(data: pd.DataFrame,) -> dict:
+def get_AOI_hits(data: pd.DataFrame) -> dict:
     """Returns a dictionary containing AOIs and timestamps of their samples.
     """
-    # Get the AOIs from column names. Get columns which contain "AOI" in their names.
     AOIs = [col for col in data.columns if "AOI" in col]
-    # Get AOI indices from column names.
-    
-
-    # Create a dictionary with AOIs as keys and empty lists as values.
-    AOI_hits = {AOI: [] for AOI in AOIs}
+    AOI_hits = {AOI: {'timestamps': [], 'hits': 0} for AOI in AOIs}
 
     # Iterate over rows and columns. If a cell contains 1, append the timestamp to the list of the corresponding AOI.
     for row in data.iterrows():
         for AOI in AOIs:
             for col in data.columns:
-                if (col == AOI) and (row.ix[col] == 1):
-                    AOI_hits[AOI].append(data['Recording timestamp]'])
-        return AOI_hits
+                if (col == AOI) and (row[1][col] == 1):
+                    AOI_hits[AOI]['timestamps'].append(row[1]['Recording timestamp'])
+    
+    # add number of hits to the dictionary
+    for AOI in AOI_hits.keys():
+        AOI_hits[AOI]['hits'] = len(AOI_hits[AOI]['timestamps'])
+    
+    return AOI_hits
 
-data = pd.read_csv('trim.tsv', sep='\t', header=0, index_col=0)
-AOI_hits = get_AIO_hits(data)
-print(AOI_hits)
+# data = pd.read_csv('trim.tsv', sep='\t', header=0)
+# print(data.head())
+# AOI_hits = get_AOI_hits(data)
+# json.dump(AOI_hits, open('AOI_hits.json', 'w'))
