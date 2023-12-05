@@ -24,3 +24,10 @@ def get_AOI_hits(data: pd.DataFrame) -> dict:
 # print(data.head())
 # AOI_hits = get_AOI_hits(data)
 # json.dump(AOI_hits, open('AOI_hits.json', 'w'))
+
+def get_gaze_by_stimulus(data: pd.DataFrame) -> dict:
+    """Returns a list of dictionarys containing gaze coordinates for each stimulus.
+    """
+    gaze_by_stimulus = []
+    stimuli = data['StimulusName'].unique()
+    
