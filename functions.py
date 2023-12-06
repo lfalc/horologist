@@ -28,29 +28,42 @@ def get_AOI_hits(data: pd.DataFrame) -> dict:
 # json.dump(AOI_hits, open('AOI_hits.json', 'w'))
 
 
-def get_gaze_by_stimulus(data: pd.DataFrame) -> dict:
-    """Returns a list of dictionarys containing gaze coordinates for each stimulus.
+def get_gaze_by_stimulus(data: pd.DataFrame) -> list:
+    """Returns a list of data frames containing gaze coordinates for each stimulus.
     """
-    # drop rows with Event "MouseEvent"
+
     data = data[data['Event'] != 'MouseEvent']
+    stimuli = ["Speedmaster (1)", "Rolex_bearbeitet", "00_Zenit", "Zeppelin"]
 
     gaze_by_stimulus = []
 
     for participant in data['Participant name'].unique():
-        data_participant = data[data['Participant name'] == participant]
-        for event in data_participant['Event value'].unique():
+        print('Participant: ', participant)
+        data_participant = data[data['Participant name'] == participant].copy()
+        print(data_participant.head())
+        for event in stimuli:
             start_index = data_participant[(data_participant['Event value'] == event) &
-                                           (data_participant['Event'] == 'ImageStimulusStart')]
+                                           (data_participant['Event'] == 'ImageStimulusStart')].copy()
             end_index = data_participant[(data_participant['Event value'] == event) &
-                                         (data_participant['Event'] == 'ImageStimulusEnd')]
-            print(f"Participant: {participant}, Event: {event}")
-            gaze = data_participant[(data_participant['Recording timestamp'] >= start_index['Recording timestamp'].values[0]) &
-                                    (data_participant['Recording timestamp'] <= end_index['Recording timestamp'].values[0])]
-            gaze_by_stimulus.append({'participant': participant,
-                                     'event': event,
-                                     'gaze': gaze})
+                                         (data_participant['Event'] == 'ImageStimulusEnd')].copy()
+            
+            gaze = data_participant[start_index.index[0]:end_index.index[0]+1].copy()
+            print(gaze.isna().sum())
+            gaze = gaze[['Gaze point X', 'Gaze point Y']].copy().dropna()
+
+            
+            # print(f"Gaze size: {gaze.shape[0]}")  # Print the size of the gaze DataFrame
+            # print(gaze.head())
+
+            gaze_by_stimulus.append({'participant': str(participant),
+                                     'event': str(event),
+                                     'gaze_X': gaze['Gaze point X'].astype(int).tolist(),
+                                     'gaze_Y': gaze['Gaze point Y'].astype(int).tolist()
+                                     })
+
+    return gaze_by_stimulus
 
 
-data = pd.read_csv('trim.tsv', sep='\t', header=0)
+data = pd.read_csv('raw_data_trimmed.tsv', sep='\t', header=0)
 gaze_by_stimulus = get_gaze_by_stimulus(data)
-print(gaze_by_stimulus[0]['gaze'].head())
+json.dump(gaze_by_stimulus, open('gaze_by_stimulus.json', 'w'))
