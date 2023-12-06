@@ -22,7 +22,7 @@ def plot_AOI_hits(AOI_hits, filename, text_size=12, text_x=1, text_y=1):
     fig.savefig(filename)  # Save the figure
     return fig
 
-with open('AOI_hits.json', 'r') as f:
+with open('first_AOI_hits.json', 'r') as f:
     AOI_hits = json.load(f)
 
 # Combine entries 
@@ -51,6 +51,6 @@ AOI_hits["Combined Datum"] = {'hits': combined_hits_datum}
 
 AOI_hits = dict(sorted(AOI_hits.items(), key=lambda item: item[1]['hits'], reverse=True))
 
-fig = plot_AOI_hits(AOI_hits, 'AOI_hits.png')
+fig = plot_AOI_hits(AOI_hits, 'AOI_first_hits.png')
 # Save the figure.	
-fig.savefig('AOI_hits.png')
+fig.savefig('AOI_first_hits.png')
