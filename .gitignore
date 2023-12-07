@@ -5,3 +5,6 @@ trim.tsv
 __pycache__/functions.cpython-39.pyc
 __pycache__/functions.cpython-310.pyc
 stimuli/
+AOI_grouped_over_time.csv
+AOI_hits.csv
+AOI_hits.csv
