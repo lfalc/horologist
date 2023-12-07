@@ -32,7 +32,7 @@ def get_gaze_by_stimulus(data: pd.DataFrame) -> list:
     """Returns a list of data frames containing gaze coordinates for each stimulus.
     """
 
-    data = data[data['Event'] != 'MouseEvent']
+    # data = data[data['Event'] != 'MouseEvent']
     stimuli = ["Speedmaster (1)", "Rolex_bearbeitet", "00_Zenit", "Zeppelin"]
 
     gaze_by_stimulus = []
@@ -40,27 +40,22 @@ def get_gaze_by_stimulus(data: pd.DataFrame) -> list:
     for participant in data['Participant name'].unique():
         print('Participant: ', participant)
         data_participant = data[data['Participant name'] == participant].copy()
-        print(data_participant.head())
         for event in stimuli:
             start_index = data_participant[(data_participant['Event value'] == event) &
-                                           (data_participant['Event'] == 'ImageStimulusStart')].copy()
+                                           (data_participant['Event'] == 'ImageStimulusStart')]
             end_index = data_participant[(data_participant['Event value'] == event) &
-                                         (data_participant['Event'] == 'ImageStimulusEnd')].copy()
-            
-            gaze = data_participant[start_index.index[0]:end_index.index[0]+1].copy()
-            print(gaze.isna().sum())
-            gaze = gaze[['Gaze point X', 'Gaze point Y']].copy().dropna()
+                                         (data_participant['Event'] == 'ImageStimulusEnd')]
 
-            
-            # print(f"Gaze size: {gaze.shape[0]}")  # Print the size of the gaze DataFrame
-            # print(gaze.head())
+            gaze = data_participant[start_index.index[0]:end_index.index[0]].copy()
+            gaze = gaze.dropna(subset=['Gaze point X', 'Gaze point Y'])
 
             gaze_by_stimulus.append({'participant': str(participant),
                                      'event': str(event),
                                      'gaze_X': gaze['Gaze point X'].astype(int).tolist(),
                                      'gaze_Y': gaze['Gaze point Y'].astype(int).tolist()
                                      })
-
+        data = data[data['Participant name'] != participant]
+        data = data.reset_index(drop=True)
     return gaze_by_stimulus
 
 
