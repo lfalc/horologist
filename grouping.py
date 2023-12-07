@@ -36,8 +36,15 @@ def calculate_ranking(input_file):
     df_points['Total Points'] = df_points['Total Points'].astype(int)
     df_points['Teilnehmer Nummer'] = df_sorted['Teilnehmer Nummer']
     df_points_sorted = df_points.sort_values('Total Points', ascending=True)
-    output_file = 'Fragen Eyetracking Ranking.csv'
-    df_points_sorted.to_csv(output_file, index=False)
+    df_points_sorted = df_points_sorted[['Teilnehmer Nummer', 'Total Points']]  # Keep only these columns
+    output_file = 'Fragen Eyetracking Ranking.json'
+    df_points_sorted.to_json(output_file, orient='records', index=False)
     print(f"Ranking has been saved to '{output_file}'.")
     
     return df_points_sorted
+
+
+
+if __name__ == "__main__":
+    input_file = 'Fragen Eyetracking.csv'
+    calculate_ranking(input_file)
