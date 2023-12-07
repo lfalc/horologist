@@ -1,7 +1,7 @@
 import pandas as pd, json
 
 
-def combine_aois(AOIs: pd.DataFrame) -> pd.DataFrame:
+def group_AOIs(AOIs: pd.DataFrame) -> pd.DataFrame:
     """Combine AOI hits from all pickled files in a directory into a single DataFrame."""
 
     stimuli = ["Speedmaster", "Rolex_bearbeitet", "Zenit", "Zeppelin"]
@@ -51,4 +51,5 @@ with open('AOI_hits.csv', 'r') as f:
     with open('AOI_hits.json', 'w') as g:
         json.dump(AOI_hits.columns.values.tolist(), g)    
 
-AOI_combined = combine_aois(AOI_hits)
+AOI_combined = group_AOIs(AOI_hits)
+AOI_combined.to_csv('AOI_grouped_over_time.csv', index=False)
