@@ -4,3 +4,7 @@ raw_data_trimmed copy.tsv
 trim.tsv
 __pycache__/functions.cpython-39.pyc
 __pycache__/functions.cpython-310.pyc
+Uhren Data Export no useless AOI.tsv
+first_AOI_hits.json
+AOI_hits.json
+AOI_first_hits.png
