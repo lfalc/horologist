@@ -21,6 +21,8 @@ def plot_AOI_hits(AOI_hits, filename, text_size=12, text_x=1, text_y=1):
     ax.set_xticks(range(len(labels)))
     # ax.set_xticklabels(labels, rotation=45, fontsize=12, ha='right')  # Set horizontal alignment to 'right'
     ax.text(text_x, text_y, 'Low values: ' + ', '.join(low_values), transform=ax.transAxes, ha='right', va='top', fontsize=20)  # Add the names of the low values
+    total_hits = sum(AOI['hits'] for AOI in AOI_hits.values())
+    ax.text(text_x, text_y, 'Total hits: ' + str(total_hits), transform=ax.transAxes, ha='left', va='top', fontsize=text_size)
     plt.tight_layout()  # Adjust the layout to make room for the x-axis labels
     fig.savefig(filename)  # Save the figure
     return fig
@@ -61,4 +63,4 @@ def process_and_plot(filename, output_filename, text_size=12, text_x=1, text_y=1
 
 
 process_and_plot('first_AOI_hits.json', 'AOI_first_hits.png', text_size=14)
-process_and_plot('AOI_hits.json', 'AOI_hits.png', text_size=14)
+process_and_plot('AOI_hits_2.json', 'AOI_hits.png', text_size=14)
