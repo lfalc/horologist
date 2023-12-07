@@ -115,7 +115,7 @@ def plot_AOI_hits(AOI_hits, filename, text_size=12, text_x=1, text_y=1):
     total_hits = sum(AOI['hits'] for AOI in AOI_hits.values())
     for i, (key, value) in enumerate(AOI_hits.items()):
         percentage = (value['hits'] / total_hits) * 100  # Calculate the percentage of total hits
-        if value['hits'] >= 100:  # Only plot bars for values >= 100
+        if value['hits'] >= 10:  # Only plot bars for values >= 100
             ax.bar(i, value['hits'], label=key)
             ax.text(i, value['hits'], f"{key} ({percentage:.2f}%)", ha='center', va='bottom', fontsize="20", rotation=10)  # Add the bar name and the percentage
             labels.append(key)  # Use the original key as the label
